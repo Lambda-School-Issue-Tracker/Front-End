@@ -1,0 +1,13 @@
+.addTicketBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  background-color: white;
+  width: 3rem;
+}
+
+ion-icon {
+  font-size: 350%;
+  color: blue;
+}
