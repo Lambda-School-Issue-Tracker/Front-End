@@ -8,7 +8,7 @@ import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import Login from "./components/Login/Login";
 import Register from "./components/Registration/Registration";
 import Dashboard from "./components/Dashboards/Dashboard";
-import AddTicket from "./components/AddTicket/AddTicket.js";
+import AddTicket from "./components/Reusable/AddTicket/AddTicketForm.js";
 import "./App.css";
 
 const App = () => {

@@ -1,0 +1,23 @@
+.appBody {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  border: 5px solid yellow;
+}
+
+.appViews {
+  border: 5px solid green;
+  width: 82.5%;
+}
+
+.logOutBtn {
+  background-color: white;
+  color: black;
+  width: 4rem;
+  height: 1.5rem;
+}
+
+.logOutBtn:hover {
+  background: black;
+  color: white;
+}
