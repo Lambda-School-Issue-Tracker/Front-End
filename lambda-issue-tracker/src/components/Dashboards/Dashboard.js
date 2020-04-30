@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../../UserContext/UserContext";
 import NavBar from "../Reusable/NavBar/NavBar.js";
 
+// styles
+import "./Dashboard.css";
+
 // View Imports:
 import TLView from "./Views/TLView/TLView";
 import SLView from "./Views/SLView";
@@ -21,16 +24,22 @@ const Dashboard = () => {
 
   return (
     <>
-      <NavBar />
-      <Link onClick={logout}>Log Out</Link>
-      {userCredentials.Role === "Team Lead" ? <TLView /> : null}
-      {userCredentials.Role === "Section Lead" ? <SLView /> : null}
-      {userCredentials.Role === "Student Leadership Coordinator" ? (
-        <SLCView />
-      ) : null}
-      {userCredentials.Role === "Student Success Coordinator" ? (
-        <SSView />
-      ) : null}
+      <section className="appBody">
+        <NavBar />
+        <section className="appViews">
+          <button className="logOutBtn" onClick={logout}>
+            Log Out
+          </button>
+          {userCredentials.Role === "Team Lead" ? <TLView /> : null}
+          {userCredentials.Role === "Section Lead" ? <SLView /> : null}
+          {userCredentials.Role === "Student Leadership Coordinator" ? (
+            <SLCView />
+          ) : null}
+          {userCredentials.Role === "Student Success Coordinator" ? (
+            <SSView />
+          ) : null}
+        </section>
+      </section>
     </>
   );
 };
