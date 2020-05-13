@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../../../UserContext/UserContext";
+import axios from "axios";
 import { axiosWithAuth } from "../../../../axiosWithAuth/axiosWithAuth";
 import plusBtn from "../../../../assets/plus.png";
 import AddTickBtn from "../../../Reusable/addTickBtn/addTickBtn.js";
@@ -8,16 +9,23 @@ import AddTickBtn from "../../../Reusable/addTickBtn/addTickBtn.js";
 import "./TLView.css";
 
 const TLView = () => {
-  const { userId } = useContext(UserContext);
+  const { userCredentials } = useContext(UserContext);
   const [tickets, setTickets] = useState();
-  console.log("in state:", tickets);
+  const [students, setStudents] = useState();
+
+  console.log("TICKET STATE:", tickets, students);
 
   useEffect(() => {
-    axiosWithAuth()
-      .get(`/tickets/user/${userId}`)
+    // GET BY TL NEEDS TO BE FIXED --- DELETE AFTER FIXING
+    axios
+      .all([
+        axiosWithAuth().get("/students/byTL", userCredentials.Full_Name),
+        axiosWithAuth().get(`/tickets/user/${userCredentials.User_Id}`),
+      ])
       .then((res) => {
-        console.log(res.data);
-        setTickets(res.data.tickets);
+        // console.log("TICKETS CALL:", res[1].data.tickets);
+        setTickets(res[1].data.tickets);
+        setStudents(res[0].data.students);
       })
       .catch((err) => {
         console.log(err);

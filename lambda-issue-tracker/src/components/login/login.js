@@ -70,7 +70,6 @@ const Login = (props) => {
     axiosWithAuth()
       .post("/auth/login", userCredentials)
       .then((res) => {
-        console.log("API RESPONSE:", res);
         localStorage.setItem("token", res.data.token);
 
         // set's the items on state so the initial load send this data to the useEffect hook to process axios call.

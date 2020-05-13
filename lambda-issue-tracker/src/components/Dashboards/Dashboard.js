@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { UserContext } from "../../UserContext/UserContext";
 import NavBar from "../Reusable/NavBar/NavBar.js";
+import { axiosWithAuth } from "../.././axiosWithAuth/axiosWithAuth";
 
 // styles
 import "./Dashboard.css";
@@ -11,11 +12,26 @@ import TLView from "./Views/TLView/TLView";
 import SLView from "./Views/SLView";
 import SLCView from "./Views/SLCView";
 import SSView from "./Views/SSView";
+// import { number } from "yup";
 
 const Dashboard = () => {
   const { userCredentials, setUserCredentials } = useContext(UserContext);
 
   console.log("IN DASHBOARD:", userCredentials);
+
+  useEffect(() => {
+    axiosWithAuth()
+      .get(`/users/${parseInt(localStorage.getItem("User_Id"))}`)
+      .then((res) => {
+        setUserCredentials({
+          ...res.data.user,
+        });
+        localStorage.setItem("FullName", res.data.user.Full_Name);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const logout = () => {
     localStorage.clear("token", "Role", "User_Id");
@@ -40,6 +56,7 @@ const Dashboard = () => {
           ) : null}
         </section>
       </section>
+      )
     </>
   );
 };
