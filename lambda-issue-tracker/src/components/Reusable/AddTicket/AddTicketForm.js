@@ -22,7 +22,7 @@ const AddTicket = () => {
       "Team Lead",
     ],
     Track: ["Web", "UX", "DS", "iOS"],
-    Cohort: "",
+    Cohort: ["Web27", "Web28", "Web29", "Web30"],
     Triggering_Record: "",
     TL_Name: "",
     SL1_Name: "",
@@ -40,6 +40,7 @@ const AddTicket = () => {
     Full_Name: "",
     Role: "",
     Track: "",
+    Cohort: "",
   });
 
   let history = useHistory();
@@ -138,6 +139,9 @@ const AddTicket = () => {
                   return <option value={role}>{role}</option>;
                 })}
               </select>
+              {error.Role.length > 0 ? (
+                <p className="error">{error.Role}</p>
+              ) : null}
             </label>
             <label className="labelText">
               Track:
@@ -155,6 +159,24 @@ const AddTicket = () => {
               </select>
               {error.Track.length > 0 ? (
                 <p className="error">{error.Track}</p>
+              ) : null}
+            </label>
+            <label className="labelText">
+              Cohort:
+              <select
+                placeholder="Cohort"
+                type="text"
+                name="Cohort"
+                value={userCredentials.Cohort}
+                onChange={handleChange}
+              >
+                <option value="none">Assign User to a Cohort</option>
+                {ticket.Cohort.map((cohort) => {
+                  return <option value={cohort}>{cohort}</option>;
+                })}
+              </select>
+              {error.Cohort.length > 0 ? (
+                <p className="error">{error.Cohort}</p>
               ) : null}
             </label>
           </form>
