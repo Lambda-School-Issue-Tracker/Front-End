@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
+import { axiosWithAuth } from "../../../axiosWithAuth/axiosWithAuth";
 import { useHistory } from "react-router-dom";
 import UserContext from "../../../UserContext/UserContext";
+import StudentContext from "../../../UserContext/StudentContext";
 import * as yup from "yup";
 
 // components
@@ -11,10 +13,10 @@ import "./AddTicketForm.css";
 
 const AddTicket = () => {
   const { userCredentials } = useContext(UserContext);
-
-  console.log("In Add Tick:", userCredentials);
+  const [students, setStudents] = useState([]);
+  console.log("Students STATE:", students);
   const [ticket, setTicket] = useState({
-    Full_Name: "",
+    Full_Name: students,
     Role: [
       "Student Success Coordinator",
       "Student Leadership Coordinator",
@@ -23,7 +25,15 @@ const AddTicket = () => {
     ],
     Track: ["Web", "UX", "DS", "iOS"],
     Cohort: ["Web27", "Web28", "Web29", "Web30"],
-    Triggering_Record: "",
+    Triggering_Record: [
+      "Academic/Technical",
+      "Participation/Engagement",
+      "Student Request",
+      "Emergency",
+      "Medical/Mental Health",
+      "Plagiarism/Cheating",
+      "Access Problems (no internet/computer)",
+    ],
     TL_Name: "",
     SL1_Name: "",
     SL2_Name: "",
@@ -41,6 +51,7 @@ const AddTicket = () => {
     Role: "",
     Track: "",
     Cohort: "",
+    Triggering_Record: "",
   });
 
   let history = useHistory();
@@ -52,7 +63,18 @@ const AddTicket = () => {
   }, []);
 
   useEffect(() => {
-    // setTicket({ ...ticket, Full_Name: localStorage.getItem("FullName") });
+    /// NOT COMPLETED
+    axiosWithAuth()
+      .get("/students/byTL", userCredentials.Full_Name)
+      .then((res) => {
+        console.log("TICKET FORM", res);
+        res.data.students.map((student) => {
+          students.push(student);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   const formSchema = yup.object().shape({
@@ -111,19 +133,22 @@ const AddTicket = () => {
           <form onSubmit={formSubmit}>
             <h2>New Ticket </h2>
             <label className="labelText">
-              TL Name:
+              Student's Name:
               <select
-                placeholder="Full Name"
+                placeholder="Student's Name"
                 type="text"
-                name="Full_Name"
+                name="Role"
                 value={ticket.Full_Name}
                 onChange={handleChange}
               >
-                <option value={userCredentials.Full_Name}>
-                  {userCredentials.Full_Name}
-                </option>
-                ;
+                <option value="Assign a Role.">Assign a Role</option>
+                {/* {ticket.Full_Name.map((name) => {
+                  return <option value={name}>{name}</option>;
+                })} */}
               </select>
+              {error.Full_Name.length > 0 ? (
+                <p className="error">{error.Role}</p>
+              ) : null}
             </label>
             <label className="labelText">
               Role:
@@ -152,7 +177,7 @@ const AddTicket = () => {
                 value={userCredentials.Track}
                 onChange={handleChange}
               >
-                <option value="none">Assign User to a Cohort</option>
+                <option value="none">Subjects Track</option>
                 {ticket.Track.map((track) => {
                   return <option value={track}>{track}</option>;
                 })}
@@ -170,12 +195,30 @@ const AddTicket = () => {
                 value={userCredentials.Cohort}
                 onChange={handleChange}
               >
-                <option value="none">Assign User to a Cohort</option>
+                <option value="none">Subjects Cohort</option>
                 {ticket.Cohort.map((cohort) => {
                   return <option value={cohort}>{cohort}</option>;
                 })}
               </select>
               {error.Cohort.length > 0 ? (
+                <p className="error">{error.Cohort}</p>
+              ) : null}
+            </label>
+            <label className="labelText">
+              Reason Topic:
+              <select
+                placeholder="Triage"
+                type="text"
+                name="Triggering_Record"
+                value={userCredentials.Triggering_Record}
+                onChange={handleChange}
+              >
+                <option value="none">Reason</option>
+                {ticket.Triggering_Record.map((trigger) => {
+                  return <option value={trigger}>{trigger}</option>;
+                })}
+              </select>
+              {error.Triggering_Record.length > 0 ? (
                 <p className="error">{error.Cohort}</p>
               ) : null}
             </label>
