@@ -9,14 +9,13 @@ import AddTickBtn from "../../../Reusable/addTickBtn/addTickBtn.js";
 import "./TLView.css";
 
 const TLView = () => {
-  const { userCredentials } = useContext(UserContext);
   const [tickets, setTickets] = useState();
   const [students, setStudents] = useState();
+  const { userCredentials } = useContext(UserContext);
 
   console.log("TICKET STATE:", tickets, students);
 
   useEffect(() => {
-    // GET BY TL NEEDS TO BE FIXED --- DELETE AFTER FIXING
     axios
       .all([
         axiosWithAuth().get("/students/byTL", userCredentials.Full_Name),
