@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-// import { Link } from "react-router-dom";
 import { UserContext } from "../../UserContext/UserContext";
 import NavBar from "../Reusable/NavBar/NavBar.js";
 import { axiosWithAuth } from "../.././axiosWithAuth/axiosWithAuth";
@@ -12,9 +11,8 @@ import TLView from "./Views/TLView/TLView";
 import SLView from "./Views/SLView";
 import SLCView from "./Views/SLCView";
 import SSView from "./Views/SSView";
-// import { number } from "yup";
 
-const Dashboard = () => {
+const Dashboard = (prop) => {
   const { userCredentials, setUserCredentials } = useContext(UserContext);
 
   console.log("IN DASHBOARD:", userCredentials);

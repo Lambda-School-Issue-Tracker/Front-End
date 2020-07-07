@@ -16,7 +16,7 @@ const AddTicket = () => {
   const [students, setStudents] = useState([]);
   console.log("Students STATE:", students);
   const [ticket, setTicket] = useState({
-    Full_Name: students,
+    Full_Name: "",
     Role: [
       "Student Success Coordinator",
       "Student Leadership Coordinator",
@@ -43,7 +43,7 @@ const AddTicket = () => {
     Creators: parseInt(localStorage.getItem("User_Id")),
   });
 
-  console.log("TICKET:", ticket);
+  console.log("TICKET:", ticket.Full_Name);
 
   const [enabler, setEnabler] = useState(false);
   const [error, setError] = useState({
@@ -52,6 +52,7 @@ const AddTicket = () => {
     Track: "",
     Cohort: "",
     Triggering_Record: "",
+    TL_Name: "",
   });
 
   let history = useHistory();
@@ -60,31 +61,33 @@ const AddTicket = () => {
     formSchema.isValid(ticket).then((valid) => {
       setEnabler(!valid);
     });
-  }, []);
-
-  useEffect(() => {
-    /// NOT COMPLETED
     axiosWithAuth()
       .get("/students/byTL", userCredentials.Full_Name)
       .then((res) => {
-        console.log("TICKET FORM", res);
-        res.data.students.map((student) => {
-          students.push(student);
-        });
+        console.log("USE EFFECT STUDENT CALL", res);
+        const students = res.data.students;
+        setStudents(
+          students.map((student) => {
+            if (student.TL_Name === userCredentials.Full_Name) {
+              return student.Full_Name;
+            }
+          })
+        );
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [ticket]);
 
   const formSchema = yup.object().shape({
-    // Email: yup
-    //   .string()
-    //   .email(
-    //     "Email is invalid. Hint: Make sure the email contains '@provider.com'."
-    //   )
-    //   .required("Must include email address."),
-    // Password: yup.string().required("Password is required."),
+    Full_Name: yup.string().required("Please, select a student"),
+    Role: yup.string().required("Please select the subjects role!"),
+    Track: yup.string().required("Please select the subjects core track!"),
+    Cohort: yup.string().required("Please, select the subjects current cohort"),
+    Triggering_Record: yup
+      .string()
+      .required("Please, select why you're making this escalation"),
+    TL_Name: yup.string().required("Please, enter your name"),
   });
 
   const validateChange = (e) => {
@@ -108,6 +111,7 @@ const AddTicket = () => {
   const handleChange = (e) => {
     e.persist();
     const newFormData = {
+      ...ticket,
       [e.target.name]: e.target.value,
     };
 
@@ -141,10 +145,12 @@ const AddTicket = () => {
                 value={ticket.Full_Name}
                 onChange={handleChange}
               >
-                <option value="Assign a Role.">Assign a Role</option>
-                {/* {ticket.Full_Name.map((name) => {
-                  return <option value={name}>{name}</option>;
-                })} */}
+                <option value="Assign a Role.">Select Student</option>
+                {students.map((name) => {
+                  if (name !== undefined) {
+                    return <option value={name}>{name}</option>;
+                  }
+                })}
               </select>
               {error.Full_Name.length > 0 ? (
                 <p className="error">{error.Role}</p>
@@ -159,7 +165,7 @@ const AddTicket = () => {
                 value={ticket.Role}
                 onChange={handleChange}
               >
-                <option value="Assign a Role.">Assign a Role</option>
+                <option value="Assign a Role.">Role</option>
                 {ticket.Role.map((role) => {
                   return <option value={role}>{role}</option>;
                 })}
@@ -174,7 +180,7 @@ const AddTicket = () => {
                 placeholder="Track"
                 type="text"
                 name="Track"
-                value={userCredentials.Track}
+                value={ticket.Track}
                 onChange={handleChange}
               >
                 <option value="none">Subjects Track</option>
@@ -192,7 +198,7 @@ const AddTicket = () => {
                 placeholder="Cohort"
                 type="text"
                 name="Cohort"
-                value={userCredentials.Cohort}
+                value={ticket.Cohort}
                 onChange={handleChange}
               >
                 <option value="none">Subjects Cohort</option>
@@ -205,12 +211,12 @@ const AddTicket = () => {
               ) : null}
             </label>
             <label className="labelText">
-              Reason Topic:
+              Triggering Record:
               <select
                 placeholder="Triage"
                 type="text"
                 name="Triggering_Record"
-                value={userCredentials.Triggering_Record}
+                value={ticket.Triggering_Record}
                 onChange={handleChange}
               >
                 <option value="none">Reason</option>
@@ -219,7 +225,25 @@ const AddTicket = () => {
                 })}
               </select>
               {error.Triggering_Record.length > 0 ? (
-                <p className="error">{error.Cohort}</p>
+                <p className="error">{error.Triggering_Record}</p>
+              ) : null}
+            </label>
+            <label className="labelText">
+              Tl's Name
+              <select
+                placeholder="TL Name"
+                type="text"
+                name="TL_Name"
+                value={ticket.Full_Name}
+                onChange={handleChange}
+              >
+                <option value="None">TL Name</option>
+                <option value={userCredentials.Full_Name}>
+                  {userCredentials.Full_Name}
+                </option>
+              </select>
+              {error.Triggering_Record.length > 0 ? (
+                <p className="error">{error.Triggering_Record}</p>
               ) : null}
             </label>
           </form>
