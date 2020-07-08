@@ -40,6 +40,8 @@ const AddTicket = () => {
     Cohort: "",
     Triggering_Record: "",
     TL_Name: "",
+    TL_Efforts_Made: "",
+    SL_Efforts_Made: "",
   });
 
   let history = useHistory();
@@ -79,6 +81,12 @@ const AddTicket = () => {
       .string()
       .required("Please, select why you're making this escalation"),
     TL_Name: yup.string().required("Please, enter your name"),
+    TL_Efforts_Made: yup
+      .string()
+      .required("Please, provide the efforts you've made"),
+    SL_Efforts_Made: yup
+      .string()
+      .required("Please, provide the efforts you've made"),
   });
 
   const validateChange = (e) => {
@@ -252,6 +260,68 @@ const AddTicket = () => {
                 <option value="None">TL Name</option>
                 <option value={localStorage.getItem("FullName")}>
                   {localStorage.getItem("FullName")}
+                </option>
+              </select>
+              {error.Full_Name.length > 0 ? (
+                <p className="error">{error.Full_Name}</p>
+              ) : null}
+            </label>
+            <label className="labelText">
+              Tl's Name
+              <select
+                placeholder="TL Name"
+                type="text"
+                name="TL_Efforts_Made"
+                value={ticket.TL_Efforts_Made}
+                onChange={handleChange}
+              >
+                <option value="None">TL Name</option>
+                <option value={"Support Hours"}>{"Support Hours"}</option>
+                <option value={"After Hours"}>{"After Hours"}</option>
+                <option value={"Help Channel"}>{"Help Channel"}</option>
+                <option value={"TL 1:1"}>{"TL 1:1"}</option>
+                <option value={"SL 1:1"}>{"SL 1:1"}</option>
+                <option value={"Instructor Hours"}>{"Instructor Hours"}</option>
+                <option value={"Verbally Encourage"}>
+                  {"Verbally Encourage"}
+                </option>
+                <option value={"Suggested Modern Health "}>
+                  {"Suggested Modern Health "}
+                </option>
+                <option value={"Student HandBook"}>{"Student HandBook"}</option>
+                <option value={"Direct Escalation"}>
+                  {"Direct Escalation"}
+                </option>
+              </select>
+              {error.Full_Name.length > 0 ? (
+                <p className="error">{error.Full_Name}</p>
+              ) : null}
+            </label>
+            <label className="labelText">
+              Tl's Name
+              <select
+                placeholder="TL Name"
+                type="text"
+                name="SL_Efforts_Made"
+                value={ticket.SL_Efforts_Made}
+                onChange={handleChange}
+              >
+                <option value="None">TL Name</option>
+                <option value={"Support Hours"}>{"Support Hours"}</option>
+                <option value={"After Hours"}>{"After Hours"}</option>
+                <option value={"Help Channel"}>{"Help Channel"}</option>
+                <option value={"TL 1:1"}>{"TL 1:1"}</option>
+                <option value={"SL 1:1"}>{"SL 1:1"}</option>
+                <option value={"Instructor Hours"}>{"Instructor Hours"}</option>
+                <option value={"Verbally Encourage"}>
+                  {"Verbally Encourage"}
+                </option>
+                <option value={"Suggested Modern Health "}>
+                  {"Suggested Modern Health "}
+                </option>
+                <option value={"Student HandBook"}>{"Student HandBook"}</option>
+                <option value={"Direct Escalation"}>
+                  {"Direct Escalation"}
                 </option>
               </select>
               {error.Full_Name.length > 0 ? (
